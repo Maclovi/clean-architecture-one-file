@@ -1,5 +1,9 @@
-# clean-architecture-one-file
-Implementation of clean architecture in one file
+# Implementation of clean architecture in one file
+## How to run
+```bash
+pip install -e .
+uvicorn --factory main:create_app
+```
 # Description
 ## Domain
 Слой **Domain** (или доменный слой) в архитектуре, основанной на принципах чистой архитектуры, отвечает за бизнес-логику и правила, специфичные для предметной области приложения. Он является ключевым компонентом, который инкапсулирует все основные концепции и правила бизнеса. Вот основные функции и задачи, которые выполняет этот слой:

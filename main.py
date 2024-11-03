@@ -14,14 +14,14 @@ from fastapi.responses import FileResponse
 from fastapi.security import HTTPBasic
 
 
-# --------------- DOMAIN ---------------
+# --------------- DOMAIN LAYER ---------------
 @dataclass
 class User:
     username: str
     password: str
 
 
-# --------------- DOMAIN ---------------
+# --------------- DOMAIN LAYER ---------------
 
 
 # --------------- APPLICATION LAYER ---------------
@@ -50,8 +50,8 @@ class UserRepositoryProtocol(Protocol):
 class AccessService:
     def __init__(
         self,
-        credentials: FromDishka[HTTPBasicCredentialsProtocol],
-        user_repository: FromDishka[UserRepositoryProtocol],
+        credentials: HTTPBasicCredentialsProtocol,
+        user_repository: UserRepositoryProtocol,
     ) -> None:
         self._credentials = credentials
         self._user_repository = user_repository
@@ -60,7 +60,6 @@ class AccessService:
         data = self._credentials
         repo = self._user_repository
         user: User | None = repo.with_username(data.username)
-
         if user is None:
             raise UserNotFoundError
         if user.password != data.password:
@@ -90,7 +89,6 @@ async def get_protected_resource(access_service: FromDishka[AccessService]) -> s
             detail="User not authenticated",
             headers={"WWW-Authenticate": "Basic"},
         ) from exc
-
     return "You got my secret, welcome!"
 
 
